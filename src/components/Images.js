@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useRef, useState } from 'react';
+import Image from "./image";
 
 export default function Images() {
 
@@ -30,6 +30,15 @@ export default function Images() {
 
     ]);
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  // const inputBox = document.getElementById('inputBox');
+  // inputBox.focus()
+  //console.log(inputBox);
+  }, [])
+
 const [newImageUrl, setNewImageUrl] = useState("");
 
 function handleRemove(index){
@@ -37,7 +46,6 @@ function handleRemove(index){
    setimages([...images.slice(0,index),...images.slice(index+1,images.length)]); //spread operator
 }
 
-const [isHovering, setIsHovering] = useState(false)
 
 
 // function crossclass(){
@@ -45,17 +53,7 @@ const [isHovering, setIsHovering] = useState(false)
 // }
 
 function ShowImage(prams){
-    return (images.map((image,index)=>{
-        return (
-    <div className="w-1/3 my-4 flex justify-center" key={index}>
-        <div className="relative"> 
-        <i className={`fas fa-times  absolute right-0 cursor-pointer opacity-25  hover:opacity-100 ${isHovering?"":"hidden"}`} onClick={()=>handleRemove(index)}> </i>
-        <img src={image} width ="180" onMouseEnter={()=>setIsHovering(true)} onMouseLeave={()=>setIsHovering(false)}/>
-        </div>
-
-    </div>
-    );
-  })
+    return images.map((img,index)=><Image  image={img} handleRemove={handleRemove} index={index} key={index}/>
     );}
 
 
@@ -85,6 +83,8 @@ function handleChange(event){
   
                     <input
                          type="text" 
+                         id="inputBox"
+                         ref={inputRef}
                          className="p-1 border border-gray-800 shadow rounded w-full"
                          value={newImageUrl}
                          onChange={handleChange}

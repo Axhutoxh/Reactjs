@@ -1,3 +1,4 @@
+import Axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Image from "./image";
 
@@ -18,26 +19,24 @@ export default function Images() {
 
     },[])
 
-    const [images, setimages] = useState([
-        "https://images.unsplash.com/photo-1593642532454-e138e28a63f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-        "https://images.unsplash.com/photo-1604367078108-3ed095682132?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-        "https://images.unsplash.com/photo-1604361709763-44f7fc6dd075?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-        "https://images.unsplash.com/photo-1602526428496-8346b5cf9954?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=727&q=80",
-        "https://images.unsplash.com/photo-1604329051903-d89ddd523330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=751&q=80",
-        "https://images.unsplash.com/photo-1604326208115-ce65e78475c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=799&q=80",
-        "https://images.unsplash.com/photo-1604102387673-48ab602201ec?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-        
-
-    ]);
+    const [images, setimages] = useState([]);
 
   const inputRef = useRef(null);
+  const varRef = useRef(images.length);
 
   useEffect(() => {
     inputRef.current.focus();
-  // const inputBox = document.getElementById('inputBox');
-  // inputBox.focus()
-  //console.log(inputBox);
-  }, [])
+   // console.log(varRef);
+    Axios.get('https://api.unsplash.com/photos/?client_id=dIHt8U459VWJLd1gObIWX1wacAAOe-qo7xoxj2EGL3E').then((res)=> {
+      console.log(res);
+    })
+
+  }, []);
+
+
+  useEffect(() => {
+    varRef.current = varRef.current+1;
+  });
 
 const [newImageUrl, setNewImageUrl] = useState("");
 
@@ -74,6 +73,8 @@ function handleChange(event){
 
   return (
         <section>
+            <h1>{varRef.current} Images</h1>
+            <p>Component is updated {varRef.current} times</p>
             <div className="flex flex-wrap justify-center"> 
                 <ShowImage  />
             </div>

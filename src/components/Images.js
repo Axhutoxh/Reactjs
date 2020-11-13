@@ -1,48 +1,28 @@
-import Axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import useFetchImage from '../utils/hooks/useFetchImage';
+import useScroll from '../utils/hooks/useScroll';
 import Image from "./image";
 
 export default function Images() {
+  const [page, setPage] = useState(1)
 
    // const [myinterval, setmyinterval] = useState(null);
-
-    useEffect(()=> {
-     console.log("images mounted");
-           const interval = setInterval(()=>{
-             },1000)
-         ;
-
-        return()=>{
-            clearInterval(interval);
-        }
-
-
-    },[])
-
-    const [images, setimages] = useState([]);
-
+  const [images,setImages] = useFetchImage(page); 
   const inputRef = useRef(null);
-  const varRef = useRef(images.length);
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current.focus(); 
    // console.log(varRef);
-    Axios.get('https://api.unsplash.com/photos/?client_id=dIHt8U459VWJLd1gObIWX1wacAAOe-qo7xoxj2EGL3E').then((res)=> {
-      console.log(res);
-    })
+
 
   }, []);
 
-
-  useEffect(() => {
-    varRef.current = varRef.current+1;
-  });
 
 const [newImageUrl, setNewImageUrl] = useState("");
 
 function handleRemove(index){
    // setimages(images.filter((image,i)=> i != index)); //filter operator
-   setimages([...images.slice(0,index),...images.slice(index+1,images.length)]); //spread operator
+   setImages([...images.slice(0,index),...images.slice(index+1,images.length)]); //spread operator
 }
 
 
@@ -52,13 +32,17 @@ function handleRemove(index){
 // }
 
 function ShowImage(prams){
-    return images.map((img,index)=><Image  image={img} handleRemove={handleRemove} index={index} key={index}/>
-    );}
+    return images.map((img,index)=>(<Image 
+       image={img.urls.regular} 
+       handleRemove={handleRemove} 
+       index={index} 
+       key={index}/>
+    ));}
 
 
   function handleAdd(){
       if(newImageUrl != " "){
-        setimages([newImageUrl,...images]);
+        setImages([newImageUrl,...images]);
         setNewImageUrl(" ");
     
       }
@@ -73,11 +57,10 @@ function handleChange(event){
 
   return (
         <section>
-            <h1>{varRef.current} Images</h1>
-            <p>Component is updated {varRef.current} times</p>
-            <div className="flex flex-wrap justify-center"> 
+            <div className="gap-0" style ={{columnCount:6}}> 
                 <ShowImage  />
             </div>
+            <button onClick={()=> setPage(page+1)}> Load More</button>
                 <div className="flex justify-between my-5"> 
                   <div className="w-full">
 

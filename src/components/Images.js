@@ -7,7 +7,7 @@ export default function Images() {
   const [page, setPage] = useState(1)
 
    // const [myinterval, setmyinterval] = useState(null);
-  const [images,setImages] = useFetchImage(page); 
+  const [images,setImages,errors] = useFetchImage(page); 
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -57,10 +57,15 @@ function handleChange(event){
 
   return (
         <section>
-            <div className="gap-0" style ={{columnCount:6}}> 
+          {errors[0]}
+            <div className="gap-0" style ={{columnCount:5}}> 
                 <ShowImage  />
             </div>
-            <button onClick={()=> setPage(page+1)}> Load More</button>
+            {
+              errors.length >0 ? null :(<button onClick={()=> setPage(page+1)}> Load More</button>)
+
+            }
+
                 <div className="flex justify-between my-5"> 
                   <div className="w-full">
 

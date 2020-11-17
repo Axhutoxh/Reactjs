@@ -2,23 +2,58 @@ import { data } from 'autoprefixer';
 import Axios from 'axios';
 import React, { useState,useEffect } from 'react'
 
-const url = process.env.REACT_APP_UNSPLASH_URL
+const api = process.env.REACT_APP_UNSPLASH_API
 const api_key =  process.env.REACT_APP_UNSPLASH_KEY
 
 
-export default function useFetchImage(page) {
-    const [images, setImages] = useState([])
-    const [errors, setErrors] = useState([])
+export default function useFetchImage(page, searchTerm) {
+    const [images, setImages] = useState([]);
+    const [errors, setErrors] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    function fetch(){
+      const url = searchTerm == null ? 'photos?':`search/photos?query=${searchTerm}&`;
+      Axios.get(
+        `${api}/${url}client_id=${api_key}&page=${page}`
+        )
+        .then((res)=> {
+          searchTerm == null
+          ?  fetchRandom(res)
+          :  fetchSearch(res);
+          
+     
+        setIsLoading(false);
+      }).catch((e)=> {
+          setErrors(["Unable to load gallary "]);
+          setIsLoading(false);
+        });
+    }
+
+    function fetchSearch(res) {
+      page > 1 
+       ? setImages([...images,...res.data.results])
+       : setImages([...res.data.results]);
+      
+    }
+    
+    function fetchRandom(res){
+
+      setImages([...images,...res.data]);
+
+    }
+
 
     useEffect(() => {
-        Axios.get(
-            `${url}?client=${api_key}&page=${page}`
-            ).then((res)=> {
-            setImages([...images,...res.data]);
-          }).catch((e)=> {
-            setErrors(e.response.data.errors);
-          });
+        setIsLoading(true);
+        fetch();
     }, [page])
 
-      return [images,setImages,errors];
+    useEffect(() => {
+      if(searchTerm == null) return;
+      setIsLoading(true);
+      fetch();
+
+    }, [searchTerm]);
+
+      return [images,setImages,errors,isLoading];
 }

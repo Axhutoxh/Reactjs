@@ -1,32 +1,29 @@
-import { render } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./assets/css/style.css";
-import Images from "./components/Images";
+import Gallery from "./page/Gallery";
+import Home from "./page/Home";
+import Login from "./page/Login";
 
-
-function Gallery(){
-    return(
-     <section className = "flex justify-center">
-    <div className = "w-10/12">
-        <div className = "text-center">
-                <Images /> 
-         </div> 
-         </div>
-    </section>
-    );
-}
 
 function Fun(){
+     return (
+        <Router>
+            <switch>
+                <Route path="/" exact={true}>
+                 <Home />
+                </Route>
 
+                <Route path="/login" >
+                <Login />
+                </Route>
 
-    return (
-    <Router>
-        <Route path="/gallery">
-            <Gallery />
-        </Route>
+                 <Route path="/gallery">
+                 <Gallery />
+                 </Route>
+         </switch>
     </Router>
-    );
+     );
 
 }
 

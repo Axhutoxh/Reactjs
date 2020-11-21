@@ -1,10 +1,79 @@
-import React from 'react'
-
+import React, { useState } from 'react'
+import { Redirect, useHistory } from 'react-router-dom';
+import firebase from '../config/firebase';
 
 export default function Login(){
-    return <div className="flex h-screen">
-        <h1 className="m-auto text-3xl font-bold text-blue-500 ">
-           Login Page
-        </h1>
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState("");
+    const [form, setForm] = useState({email :"",password:""});
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const history=useHistory();
+
+    function handleForm(e){
+        if(isLoading) return;      
+        setIsLoading(true);
+        e.preventDefault();
+        firebase.auth().signInWithEmailAndPassword(form.email, form.password)
+        .then((res)=> {
+            // setIsLoggedIn(true);
+            history.replace("/");
+            setError("");
+            setIsLoading(false);
+        })
+        .catch((e)=>{
+            setError(e.message);
+            console.log(e);
+        })
+
+    }
+
+    function handleInput(e){
+        setForm({...form,[e.target.name]:e.target.value})
+
+    }
+
+    // if(isLoggedIn) return <Redirect to="/" />
+
+    return <div className="flex h-screen bg-gray-200">
+        <div className="m-auto w-1/3 text-white flex flex-wrap justify-center shadow-lg rounded-lg bg-gradient-to-br from-purple-900 to-purple-700">
+
+           <form className="m-5 w-10/12" onSubmit={handleForm}>
+               {(error !== "")&&<p>{error}</p>}
+           <h1 className="w-full text-3xl tracking-widest text-center my-6">
+               Login Page
+               </h1>
+               <div className="w-full my-6">
+                <input
+                 type="email" 
+                 className="p-2 rounded shadow w-full text-black"
+                 placeholder="Email or Username"
+                 name="email"
+                 value={form.email}
+                 onChange={handleInput}
+                 />
+            </div>
+            <div className="w-full my-6">
+                <input
+                 type="password" 
+                 className="p-2 rounded shadow w-full text-black"
+                 placeholder="Password"
+                 name="password"
+                 value={form.password}
+                 onChange={handleInput}
+                 />
+            </div>
+
+            <div className="w-full my-10">
+                <button
+                 type="submit"
+                 className="p-2 rounded shadow w-full bg-gradient-to-tr from-yellow-600 to-yellow-300 text-black"
+                 >
+                     {
+                         isLoading ? <i className="fas fa-circle-notch fa-spin "></i>:"Login"
+                     }
+                </button>
+            </div>
+           </form>
+        </div>
     </div>
 }

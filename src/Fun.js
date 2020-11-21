@@ -1,26 +1,24 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route} from "react-router-dom";
 import "./assets/css/style.css";
-import Gallery from "./page/Gallery";
-import Home from "./page/Home";
-import Login from "./page/Login";
+import Header from "./components/Header";
+import routes from './utils/routes';
 
 
 function Fun(){
      return (
         <Router>
+            <Header />
             <switch>
-                <Route path="/" exact={true}>
-                 <Home />
-                </Route>
-
-                <Route path="/login" >
-                <Login />
-                </Route>
-
-                 <Route path="/gallery">
-                 <Gallery />
-                 </Route>
+                {
+                    routes.map((route,index)=> (
+                        <Route 
+                        key={index}
+                        path={route.path} 
+                        exact={route.exact} 
+                        component={route.component}
+                        />
+                    ))}
          </switch>
     </Router>
      );

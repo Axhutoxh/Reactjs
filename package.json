@@ -9,6 +9,7 @@
     "autoprefixer": "^10.0.1",
     "axios": "^0.21.0",
     "firebase": "^8.0.2",
+    "formik": "^2.2.5",
     "postcss-cli": "^8.2.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -16,7 +17,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "tailwindcss": "^1.9.6",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "yup": "^0.30.0"
   },
   "scripts": {
     "build:css": "tailwindcss build src/assets/css/tailwind.css -o src/assets/css/style.css",

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Redirect, useHistory } from 'react-router-dom';
+import {useHistory } from 'react-router-dom';
 import firebase from '../config/firebase';
 
 export default function Login(){
@@ -16,7 +16,7 @@ export default function Login(){
         firebase.auth().signInWithEmailAndPassword(form.email, form.password)
         .then((res)=> {
             // setIsLoggedIn(true);
-            history.replace("/");
+            history.replace("/login");
             setError("");
             setIsLoading(false);
         })

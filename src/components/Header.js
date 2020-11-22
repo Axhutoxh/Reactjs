@@ -1,24 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import React, {  useContext } from 'react'
+import { NavLink, useHistory } from 'react-router-dom'
 import firebase from "../config/firebase"
+import FunContext from '../store/FunContext';
 
 export default function Header() {
-  const [isLoggenIn, setIsLoggenIn] = useState(false);
+  const [isLoggenIn,user] = useContext(FunContext)
   const history = useHistory();
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user)=>{
-      if (user){
-        setIsLoggenIn(true);
-      }
-    })
-  },[])
 
   function logout(){
     firebase
     .auth()
     .signOut()
     .then((res)=> {
-      setIsLoggenIn(false);
+
       history.replace("/login");
     }).catch((e)=>{
       console.log(e.response.data);
@@ -26,24 +20,31 @@ export default function Header() {
 
   }
     return (
-        <nav className="py-4 bg-gray-900 text-white">
+        <nav className="py-4 bg-gray-900 text-white flex justify-between">
           <ul className="flex justify-between px-10">
-          <span className="flex ">
             <li className="mr-5">
-              <Link to="/">Home</Link>
+              <NavLink to="/" exact = {true} activeClassName="underline text-blue-200">Home</NavLink>
             </li>
             <li className="mr-5">
-              <Link to="/gallery">Gallery</Link>
+              <NavLink to="/gallery" activeClassName="underline text-blue-200">Gallery</NavLink>
             </li >
-            </span>
+            </ul>
+            <ul className="flex justify-between px-10">
             <li>
               {
                 isLoggenIn ?
                 <button onClick={logout}>Logout</button>:
-                <Link to="/login">Login</Link>
+                <NavLink to="/login" activeClassName="underline text-blue-200">Login</NavLink>
   
               }
             </li>
+            {!isLoggenIn &&  (
+            <li className="ml-5">
+              {
+                <NavLink to="/signup" activeClassName="underline text-blue-200">SignUp</NavLink>
+              }
+            </li>
+            )}
           </ul>
 
         </nav>

@@ -9,6 +9,7 @@ import AuthRoute from "./utils/routes/AuthRoute";
 import GuestRoute from "./utils/routes/GuestRoute";
 import Loading from "./components/Loading";
 import NotFound from "./page/404";
+import AnimatedRoute from "./utils/routes/AnimatedRoute";
 
 function Fun(){
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,8 +48,10 @@ function Fun(){
                                 key={index}
                                 path={route.path} 
                                 exact={route.exact} 
-                                component={route.component}
-                                />
+
+                                >
+                                <route.component />
+                                </GuestRoute>
 
                             )
 
@@ -59,18 +62,20 @@ function Fun(){
                                 key={index}
                                 path={route.path} 
                                 exact={route.exact} 
-                                component={route.component}
-                                />
+                                >
+                                <route.component />
+                                </AuthRoute>
 
                             )
                         }
                             return (
-                                <Route 
+                                <AnimatedRoute 
                                 key={index}
                                 path={route.path} 
                                 exact={route.exact} 
-                                component={route.component}
-                                />
+                                >
+                                <route.component />
+                                </AnimatedRoute>
                                 )
 
                     }

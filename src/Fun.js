@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route,Switch} from "react-router-dom";
+import { Route,Switch, useLocation} from "react-router-dom";
 import "./assets/css/style.css";
 import Header from "./components/Header";
 import routes from './utils/routes/index';
@@ -10,6 +10,7 @@ import GuestRoute from "./utils/routes/GuestRoute";
 import Loading from "./components/Loading";
 import NotFound from "./page/404";
 import AnimatedRoute from "./utils/routes/AnimatedRoute";
+import { AnimatePresence } from "framer-motion";
 
 function Fun(){
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,14 +33,15 @@ function Fun(){
           }
         })
       },[])
-    
+      const location =useLocation();
       if(isLoading) return <Loading />
-    
+
      return (
-        <Router>
+
             <FunContext.Provider value={[isLoggedIn,user]}>
             <Header />
-            <Switch>
+            <AnimatePresence exitBeforeEnter initial={false}>
+            <Switch key={location.pathname} location = {location}>
                 {
                     routes.map((route,index)=> {
                         if(route.protected == 'guest'){
@@ -86,9 +88,11 @@ function Fun(){
                         <NotFound/>
 
                     </Route>
+
          </Switch>
+         </AnimatePresence>
          </FunContext.Provider>
-    </Router>
+
      );
 
 }
